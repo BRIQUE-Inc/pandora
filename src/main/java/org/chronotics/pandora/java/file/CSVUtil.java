@@ -1,11 +1,11 @@
-package org.chronotics.pandora.scala.file;
+package org.chronotics.pandora.java.file;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import org.chronotics.pandora.exception.ExceptionUtil;
-import org.chronotics.pandora.scala.log.Logger;
-import org.chronotics.pandora.scala.log.LoggerFactory;
+import org.chronotics.pandora.java.exception.ExceptionUtil;
+import org.chronotics.pandora.java.log.Logger;
+import org.chronotics.pandora.java.log.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;

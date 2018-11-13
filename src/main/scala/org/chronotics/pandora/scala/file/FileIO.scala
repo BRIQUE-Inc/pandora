@@ -3,7 +3,7 @@ package org.chronotics.pandora.scala.file
 import java.io._
 import java.nio.file._
 
-import org.chronotics.pandora.scala.log.LoggerFactory
+import org.chronotics.pandora.java.log.LoggerFactory
 
 import scala.io.Source
 import scala.compat.Platform.EOL

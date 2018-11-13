@@ -1,4 +1,4 @@
-package org.chronotics.pandora.serialization;
+package org.chronotics.pandora.java.serialization;
 
 public class JacksonFilter {
     public static String convertNAString(String strString){

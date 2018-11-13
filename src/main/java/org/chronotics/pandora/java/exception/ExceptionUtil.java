@@ -1,4 +1,4 @@
-package org.chronotics.pandora.exception;
+package org.chronotics.pandora.java.exception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

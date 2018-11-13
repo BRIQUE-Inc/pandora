@@ -1,4 +1,4 @@
-package org.chronotics.pandora.converter;
+package org.chronotics.pandora.java.converter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

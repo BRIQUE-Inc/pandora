@@ -1,4 +1,4 @@
-package org.chronotics.pandora.math;
+package org.chronotics.pandora.java.math;
 
 import java.util.ArrayList;
 import java.util.List;

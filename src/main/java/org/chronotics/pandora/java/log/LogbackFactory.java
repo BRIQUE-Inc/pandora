@@ -1,4 +1,4 @@
-package org.chronotics.pandora.scala.log;
+package org.chronotics.pandora.java.log;
 
 public class LogbackFactory implements ILoggerFactory {
     @Override
