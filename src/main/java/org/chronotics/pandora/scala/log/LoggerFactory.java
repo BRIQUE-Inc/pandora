@@ -1,4 +1,4 @@
-package org.chronotics.pandora.log;
+package org.chronotics.pandora.scala.log;
 
 public class LoggerFactory {
     private static ILoggerFactory loggerFactoryDelegate;

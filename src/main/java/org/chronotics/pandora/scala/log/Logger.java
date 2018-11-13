@@ -1,4 +1,4 @@
-package org.chronotics.pandora.log;
+package org.chronotics.pandora.scala.log;
 
 import org.slf4j.Marker;
 
