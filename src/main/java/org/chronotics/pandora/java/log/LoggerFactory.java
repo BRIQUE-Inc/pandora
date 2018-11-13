@@ -4,7 +4,7 @@ public class LoggerFactory {
     private static ILoggerFactory loggerFactoryDelegate;
 
     static {
-        String strClassName = "org.chronotics.pithos.ext.es.log.LogbackFactory";
+        String strClassName = "org.chronotics.pandora.java.log.LogbackFactory";
 
         try {
             System.out.println("Defined Logger: " + strClassName);
