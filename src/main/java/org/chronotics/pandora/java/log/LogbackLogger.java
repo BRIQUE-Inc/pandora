@@ -78,11 +78,13 @@ public class LogbackLogger implements Logger {
     @Override
     public void debug(String format, Object arg) {
         // do not support
+        log.debug(format, arg);
     }
 
     @Override
     public void debug(String format, Object... arguments) {
         // do not support
+        log.debug(format, arguments);
     }
 
     @Override
@@ -128,11 +130,13 @@ public class LogbackLogger implements Logger {
     @Override
     public void info(String format, Object arg) {
         // do not support
+        log.info(format, arg);
     }
 
     @Override
     public void info(String format, Object... arguments) {
         // do not support
+        log.info(format, arguments);
     }
 
     @Override
@@ -178,11 +182,13 @@ public class LogbackLogger implements Logger {
     @Override
     public void warn(String format, Object arg) {
         // do not support
+        log.warn(format, arg);
     }
 
     @Override
     public void warn(String format, Object... arguments) {
         // do not support
+        log.warn(format, arguments);
     }
 
     @Override
@@ -228,11 +234,13 @@ public class LogbackLogger implements Logger {
     @Override
     public void error(String format, Object arg) {
         // do not support
+        log.error(format, arg);
     }
 
     @Override
     public void error(String format, Object... arguments) {
         // do not support
+        log.error(format, arguments);
     }
 
     @Override
