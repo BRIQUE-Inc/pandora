@@ -22,11 +22,12 @@ public class ConverterUtil {
         return (dbMin + (dbMax - dbMin) * objRandom.nextDouble());
     }
 
-    public static Long convertDateStringToMillis(String strDate, String strFormat) {
+    public static Long convertStringToLocalTimestamp(String strDate, String strFormat) {
         Long lMillis = 0L;
 
         try {
             SimpleDateFormat objSimpleDateFormat = new SimpleDateFormat(strFormat);
+            objSimpleDateFormat.setTimeZone(TimeZone.getDefault());
             Date objDate = objSimpleDateFormat.parse(strDate);
             Calendar objCalender = Calendar.getInstance();
             objCalender.setTime(objDate);
@@ -35,6 +36,14 @@ public class ConverterUtil {
         }
 
         return lMillis;
+    }
+
+    public static String convertTimestampToLocalString(Long objTimestamp, String strFormat) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(objTimestamp);
+        SimpleDateFormat objSimpleDateFormat = new SimpleDateFormat(strFormat);
+        objSimpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return objSimpleDateFormat.format(calendar.getTime());
     }
 
     private static final Map<String, String> DATE_FORMAT_REGEXPS = new HashMap<String, String>();
