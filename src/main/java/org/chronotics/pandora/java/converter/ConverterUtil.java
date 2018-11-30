@@ -38,6 +38,11 @@ public class ConverterUtil {
         return lMillis;
     }
 
+    public static Long convertMillisecondsToLocationTimestamp(Calendar objDate) {
+        objDate.setTimeZone(TimeZone.getDefault());
+        return objDate.getTimeInMillis();
+    }
+
     public static String convertTimestampToLocalString(Long objTimestamp, String strFormat) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(objTimestamp);
