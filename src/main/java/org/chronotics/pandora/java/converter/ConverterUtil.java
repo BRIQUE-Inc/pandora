@@ -1,11 +1,35 @@
 package org.chronotics.pandora.java.converter;
 
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 
 public class ConverterUtil {
+    public static Object convertByteArrayToObject(byte[] arrByte, String strClass) {
+        try {
+            if (strClass.contains("float")) {
+                return ByteBuffer.wrap(arrByte).order(ByteOrder.nativeOrder()).getFloat();
+            } else if (strClass.contains("int")) {
+                return ByteBuffer.wrap(arrByte).order(ByteOrder.nativeOrder()).getInt();
+            } else if (strClass.contains("char")) {
+                return ByteBuffer.wrap(arrByte).order(ByteOrder.nativeOrder()).getChar();
+            } else if (strClass.contains("string")) {
+                return new String(arrByte);
+            } else {
+                return SerializationUtils.deserialize(arrByte);
+            }
+        } catch (Exception objEx) {
+            return null;
+        }
+    }
+
     public static String convertDashField(String strDashField) {
         if (strDashField.contains("-")) {
             return "['" + strDashField + "']";

@@ -2,16 +2,17 @@ package org.chronotics.pandora.java.file;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.chronotics.pandora.java.exception.ExceptionUtil;
 import org.chronotics.pandora.java.log.Logger;
 import org.chronotics.pandora.java.log.LoggerFactory;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileUtil {
@@ -84,6 +85,55 @@ public class FileUtil {
         }
 
         return objContentBuilder.toString();
+    }
+
+    public static byte[] readFileByte(String strFilePath) {
+        if (new File(strFilePath).exists()) {
+            try {
+                byte[] arrContentBytes = Files.readAllBytes(Paths.get(strFilePath));
+
+                return arrContentBytes;
+            } catch (Exception objEx) {
+                log.error("ERR: ", ExceptionUtil.getStrackTrace(objEx));
+
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public static HashMap<String, byte[]> readStreamFileWithBuffer(BufferedInputStream objBufferedInputStream, Long lCurOffset, Integer intBufferLength, HashMap<Integer, String> mapFieldOffset) {
+        HashMap<String, byte[]> mapContent = new HashMap<>();
+
+        try {
+            byte[] arrBuffer = new byte[intBufferLength];
+
+            Integer intCurReadLength = objBufferedInputStream.read(arrBuffer);
+
+            if (intCurReadLength != -1) {
+                List<Integer> lstFieldOffset = mapFieldOffset.keySet().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+
+                for (int intCount = 0; intCount < lstFieldOffset.size(); intCount++) {
+                    Integer intCurFieldOffset = lstFieldOffset.get(intCount);
+                    Integer intLengthField = (intCount < lstFieldOffset.size() - 1) ? (lstFieldOffset.get(intCount + 1) - intCurFieldOffset) : (arrBuffer.length - intCurFieldOffset);
+
+                    if (intLengthField > 0) {
+                        byte[] arrCurFieldByte = Arrays.copyOfRange(arrBuffer, intCurFieldOffset, intCurFieldOffset + intLengthField);
+                        String strCurFieldName = mapFieldOffset.get(intCurFieldOffset);
+
+                        mapContent.put(strCurFieldName, arrCurFieldByte);
+                    } else {
+                        throw new Exception();
+                    }
+                }
+            }
+        } catch (Exception objEx) {
+            log.error("ERR: " + ExceptionUtil.getStrackTrace(objEx));
+            mapContent = null;
+        }
+
+        return mapContent;
     }
 
     public static Boolean createDirectory(String strDir) {
