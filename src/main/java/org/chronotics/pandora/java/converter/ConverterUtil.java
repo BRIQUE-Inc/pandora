@@ -1,6 +1,7 @@
 package org.chronotics.pandora.java.converter;
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.chronotics.pandora.java.exception.ExceptionUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -15,11 +16,46 @@ public class ConverterUtil {
     public static Object convertByteArrayToObject(byte[] arrByte, String strClass) {
         try {
             if (strClass.contains("float")) {
-                return ByteBuffer.wrap(arrByte).order(ByteOrder.nativeOrder()).getFloat();
+                byte[] arrNewByte = new byte[Float.BYTES];
+                Integer intMissingByte = Float.BYTES - arrByte.length;
+
+                for (int intCount = 0; intCount < intMissingByte; intCount++) {
+                    arrNewByte[intCount] = (byte)0;
+                }
+
+                for (int intCount = 0; intCount < arrByte.length; intCount++) {
+                    arrNewByte[intMissingByte + intCount] = arrByte[intCount];
+                }
+
+                return ByteBuffer.wrap(arrNewByte, 0, Float.BYTES).getFloat();
             } else if (strClass.contains("int")) {
-                return ByteBuffer.wrap(arrByte).order(ByteOrder.nativeOrder()).getInt();
+                byte[] arrNewByte = new byte[Integer.BYTES];
+                Integer intMissingByte = Integer.BYTES - arrByte.length;
+
+                for (int intCount = 0; intCount < intMissingByte; intCount++) {
+                    arrNewByte[intCount] = (byte)0;
+                }
+
+                for (int intCount = 0; intCount < arrByte.length; intCount++) {
+                    arrNewByte[intMissingByte + intCount] = arrByte[intCount];
+                }
+
+                return ByteBuffer.wrap(arrNewByte, 0, Integer.BYTES).getInt();
+            } else if (strClass.contains("short")) {
+                byte[] arrNewByte = new byte[Short.BYTES];
+                Integer intMissingByte = Short.BYTES - arrByte.length;
+
+                for (int intCount = 0; intCount < intMissingByte; intCount++) {
+                    arrNewByte[intCount] = (byte)0;
+                }
+
+                for (int intCount = 0; intCount < arrByte.length; intCount++) {
+                    arrNewByte[intMissingByte + intCount] = arrByte[intCount];
+                }
+
+                return ByteBuffer.wrap(arrNewByte, 0, Short.BYTES).getShort();
             } else if (strClass.contains("char")) {
-                return ByteBuffer.wrap(arrByte).order(ByteOrder.nativeOrder()).getChar();
+                return ByteBuffer.wrap(arrByte, 0, Character.BYTES).getChar();
             } else if (strClass.contains("string")) {
                 return new String(arrByte);
             } else {
