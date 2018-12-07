@@ -27,7 +27,13 @@ public class ConverterUtil {
                     arrNewByte[intMissingByte + intCount] = arrByte[intCount];
                 }
 
-                return ByteBuffer.wrap(arrNewByte, 0, Float.BYTES).getFloat();
+                Float objObject = ByteBuffer.wrap(arrNewByte, 0, Float.BYTES).getFloat();
+
+                if (objObject.equals(Float.NaN)) {
+                    return null;
+                } else {
+                    return objObject;
+                }
             } else if (strClass.contains("int")) {
                 byte[] arrNewByte = new byte[Integer.BYTES];
                 Integer intMissingByte = Integer.BYTES - arrByte.length;
@@ -40,7 +46,8 @@ public class ConverterUtil {
                     arrNewByte[intMissingByte + intCount] = arrByte[intCount];
                 }
 
-                return ByteBuffer.wrap(arrNewByte, 0, Integer.BYTES).getInt();
+                Integer objObject = ByteBuffer.wrap(arrNewByte, 0, Integer.BYTES).getInt();
+                return objObject;
             } else if (strClass.contains("short")) {
                 byte[] arrNewByte = new byte[Short.BYTES];
                 Integer intMissingByte = Short.BYTES - arrByte.length;
