@@ -15,58 +15,66 @@ import java.util.function.Function;
 public class ConverterUtil {
     public static Object convertByteArrayToObject(byte[] arrByte, String strClass) {
         try {
+            ByteOrder objByteOrder = ByteOrder.LITTLE_ENDIAN;
+            Integer intNumBytes = 0;
+
             if (strClass.contains("float")) {
-                byte[] arrNewByte = new byte[Float.BYTES];
-                Integer intMissingByte = Float.BYTES - arrByte.length;
-
-                for (int intCount = 0; intCount < intMissingByte; intCount++) {
-                    arrNewByte[intCount] = (byte)0;
-                }
-
-                for (int intCount = 0; intCount < arrByte.length; intCount++) {
-                    arrNewByte[intMissingByte + intCount] = arrByte[intCount];
-                }
-
-                Float objObject = ByteBuffer.wrap(arrNewByte, 0, Float.BYTES).getFloat();
-
-                if (objObject.equals(Float.NaN)) {
-                    return null;
-                } else {
-                    return objObject;
-                }
+                intNumBytes = Float.BYTES;
             } else if (strClass.contains("int")) {
-                byte[] arrNewByte = new byte[Integer.BYTES];
-                Integer intMissingByte = Integer.BYTES - arrByte.length;
-
-                for (int intCount = 0; intCount < intMissingByte; intCount++) {
-                    arrNewByte[intCount] = (byte)0;
-                }
-
-                for (int intCount = 0; intCount < arrByte.length; intCount++) {
-                    arrNewByte[intMissingByte + intCount] = arrByte[intCount];
-                }
-
-                Integer objObject = ByteBuffer.wrap(arrNewByte, 0, Integer.BYTES).getInt();
-                return objObject;
+                intNumBytes = Integer.BYTES;
             } else if (strClass.contains("short")) {
-                byte[] arrNewByte = new byte[Short.BYTES];
-                Integer intMissingByte = Short.BYTES - arrByte.length;
-
-                for (int intCount = 0; intCount < intMissingByte; intCount++) {
-                    arrNewByte[intCount] = (byte)0;
-                }
-
-                for (int intCount = 0; intCount < arrByte.length; intCount++) {
-                    arrNewByte[intMissingByte + intCount] = arrByte[intCount];
-                }
-
-                return ByteBuffer.wrap(arrNewByte, 0, Short.BYTES).getShort();
+                intNumBytes = Short.BYTES;
             } else if (strClass.contains("char")) {
-                return ByteBuffer.wrap(arrByte, 0, Character.BYTES).getChar();
-            } else if (strClass.contains("string")) {
+                intNumBytes = Character.BYTES;
+            } else if (strClass.contains("string")){
                 return new String(arrByte);
             } else {
                 return SerializationUtils.deserialize(arrByte);
+            }
+
+            if (intNumBytes > 0) {
+                Integer intMissingByte = intNumBytes - arrByte.length;
+                byte[] arrNewByte = new byte[intNumBytes];
+
+                if (objByteOrder.equals(ByteOrder.BIG_ENDIAN)) {
+                    for (int intCount = 0; intCount < intMissingByte; intCount++) {
+                        arrNewByte[intCount] = (byte) 0;
+                    }
+
+                    for (int intCount = 0; intCount < arrByte.length; intCount++) {
+                        arrNewByte[intMissingByte + intCount] = arrByte[intCount];
+                    }
+                } else {
+                    for (int intCount = 0; intCount < arrByte.length; intCount++) {
+                        arrNewByte[intCount] = arrByte[intCount];
+                    }
+
+                    for (int intCount = 0; intCount < intMissingByte; intCount++) {
+                        arrNewByte[intMissingByte + intCount] = (byte) 0;
+                    }
+                }
+
+                if (strClass.contains("float")) {
+                    Float objObject = ByteBuffer.wrap(arrNewByte, 0, Float.BYTES).order(objByteOrder).getFloat();
+
+                    if (objObject.equals(Float.NaN)) {
+                        return null;
+                    } else {
+                        return objObject;
+                    }
+                } else if (strClass.contains("int")) {
+                    Integer objObject = ByteBuffer.wrap(arrNewByte, 0, Integer.BYTES).order(objByteOrder).getInt();
+
+                    return objObject;
+                } else if (strClass.contains("short")) {
+                    return ByteBuffer.wrap(arrNewByte, 0, Short.BYTES).order(objByteOrder).getShort();
+                } else if (strClass.contains("char")) {
+                    return ByteBuffer.wrap(arrNewByte, 0, Character.BYTES).order(objByteOrder).getChar();
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
             }
         } catch (Exception objEx) {
             return null;
