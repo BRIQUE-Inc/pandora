@@ -27,7 +27,7 @@ public class ConverterUtil {
             } else if (strClass.contains("char")) {
                 intNumBytes = Character.BYTES;
             } else if (strClass.contains("string")){
-                return new String(arrByte);
+                return new String(arrByte).trim();
             } else {
                 return SerializationUtils.deserialize(arrByte);
             }
