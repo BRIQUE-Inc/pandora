@@ -57,7 +57,7 @@ public class ConverterUtil {
                 if (strClass.contains("float")) {
                     Float objObject = ByteBuffer.wrap(arrNewByte, 0, Float.BYTES).order(objByteOrder).getFloat();
 
-                    if (objObject.equals(Float.NaN)) {
+                    if (objObject.equals(Float.NaN) || objObject.equals(Float.POSITIVE_INFINITY) || objObject.equals(Float.NEGATIVE_INFINITY)) {
                         return null;
                     } else {
                         return objObject;
