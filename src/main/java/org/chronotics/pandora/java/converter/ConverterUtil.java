@@ -189,17 +189,13 @@ public class ConverterUtil {
         return null;
     }
 
-    private static Double tryDouble(String strText) {
-        try {
-            return Double.valueOf(strText);
-        } catch (Exception objEx) {
-            return null;
-        }
-    }
-
     private static Float tryFloat(String strText) {
         try {
-            return Float.valueOf(strText);
+            if (strText.contains(".")) {
+                return Float.valueOf(strText);
+            } else {
+                return null;
+            }
         } catch (Exception objEx) {
             return null;
         }
@@ -221,10 +217,73 @@ public class ConverterUtil {
         }
     }
 
+    /*
+     *
+     */
+    private static Boolean tryBoolean(Object objValue) {
+        try {
+            if (objValue instanceof Boolean) {
+                return (Boolean)objValue;
+            } else {
+                String strText = objValue.toString().toLowerCase();
+
+                return tryBoolean(strText);
+            }
+        } catch (Exception objEx) {
+            return null;
+        }
+    }
+
+    private static Date tryDate(Object objValue) {
+        if (objValue instanceof Date) {
+            return (Date)objValue;
+        } else if (objValue instanceof Calendar) {
+            return ((Calendar)objValue).getTime();
+        } else {
+            String strText = objValue.toString();
+            return tryDate(strText);
+        }
+    }
+
+    private static Float tryFloat(Object objValue) {
+        if (objValue instanceof Float) {
+            return (Float)objValue;
+        } else if (objValue instanceof Double) {
+            return Float.valueOf(((Double)objValue).toString());
+        } else {
+            String strText = objValue.toString();
+            return tryFloat(strText);
+        }
+    }
+
+    private static Long tryLong(Object objValue) {
+        if (objValue instanceof Long) {
+            return (Long)objValue;
+        } else {
+            String strText = objValue.toString();
+            return tryLong(strText);
+        }
+    }
+
+    private static Integer tryInteger(Object objValue) {
+        if (objValue instanceof Integer) {
+            return (Integer)objValue;
+        } else {
+            return tryInteger(objValue.toString());
+        }
+    }
+
     private static final List<Function<String, Object>> FUNCTIONS = Arrays.asList(s -> tryDate(s),
-            s -> tryDouble(s), s -> tryFloat(s), s -> tryLong(s), s -> tryInteger(s), s -> tryBoolean(s));
+            s -> tryFloat(s), s -> tryInteger(s), s -> tryLong(s), s -> tryBoolean(s));
+
+    private static final List<Function<Object, Object>> FUNCTION_OBJS = Arrays.asList(s -> tryDate(s),
+            s -> tryFloat(s), s -> tryInteger(s), s -> tryLong(s), s -> tryBoolean(s));
 
     public static Object convertStringToDataType(String strValueAsString) {
         return FUNCTIONS.stream().map(f -> f.apply(strValueAsString)).filter(Objects::nonNull).findFirst().orElse(strValueAsString);
+    }
+
+    public static Object convertObjectToDataType(Object objValue) {
+        return FUNCTION_OBJS.stream().map(f -> f.apply(objValue)).filter(Objects::nonNull).findFirst().orElse(objValue);
     }
 }
