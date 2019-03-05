@@ -7,6 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,7 +29,23 @@ public class ConverterUtil {
             } else if (strClass.contains("char")) {
                 intNumBytes = Character.BYTES;
             } else if (strClass.contains("string")){
-                return new String(arrByte).trim();
+                Charset objCharset = StandardCharsets.UTF_8;
+
+                if (objByteOrder.equals(ByteOrder.LITTLE_ENDIAN)) {
+                    byte[] arrNewByte = new byte[arrByte.length];
+
+                    for (int intCount = 0; intCount < arrByte.length; intCount++) {
+                        arrNewByte[intCount] = arrByte[arrByte.length - 1 - intCount];
+                    }
+
+                    String strReturn = new String(arrNewByte).trim();
+
+                    return strReturn.replace("\\u0000", "").replace("\u0000", "").trim();
+
+                } else {
+                    return new String(arrByte).replace("\\u0000", "").replace("\u0000", "").trim();
+                }
+                //return new String(arrByte).trim();
             } else {
                 return SerializationUtils.deserialize(arrByte);
             }
