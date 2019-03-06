@@ -291,10 +291,24 @@ public class ConverterUtil {
         }
     }
 
+    public static Object tryArray(Object objValue) {
+        if (objValue instanceof ArrayList) {
+            List<Object> lstObj = (ArrayList)objValue;
+
+            if (lstObj != null && lstObj.size() > 0) {
+                return convertObjectToDataType(lstObj.get(0));
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     private static final List<Function<String, Object>> FUNCTIONS = Arrays.asList(s -> tryDate(s),
             s -> tryFloat(s), s -> tryInteger(s), s -> tryLong(s), s -> tryBoolean(s));
 
-    private static final List<Function<Object, Object>> FUNCTION_OBJS = Arrays.asList(s -> tryDate(s),
+    private static final List<Function<Object, Object>> FUNCTION_OBJS = Arrays.asList(s -> tryArray(s), s -> tryDate(s),
             s -> tryFloat(s), s -> tryInteger(s), s -> tryLong(s), s -> tryBoolean(s));
 
     public static Object convertStringToDataType(String strValueAsString) {
