@@ -8,7 +8,7 @@
     <artifactId>pandora</artifactId>
     <version>1.4-SNAPSHOT</version>
 
-    <repositories>
+    <!--<repositories>
         <repository>
             <id>brique-server</id>
             <name>Brique Repositories</name>
@@ -22,7 +22,7 @@
             <name>Brique Repositories</name>
             <url>http://inside.brique.co.kr:8081/nexus/content/repositories/brique-snapshot/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <build>
         <plugins>
